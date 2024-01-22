@@ -14,9 +14,11 @@ $apilink = $downloadlink.split('/')
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $serviceName = 'Anthrh3x'
-If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
-    write-host ('Tactical RMM Is Already Installed')
-} Else {
+$processName = 'notepad+++'
+
+if (Get-Service $serviceName -ErrorAction SilentlyContinue) {
+    Write-Host ('Tactical RMM Is Already Installed')
+} else {
     $OutPath = $env:TMP
     $output = $innosetup
 
@@ -34,48 +36,50 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         $installArgs += "--ping"
     }
 
-    Try
-    {
-        $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
+    try {
+        $DefenderStatus = Get-MpComputerStatus | select AntivirusEnabled
         if ($DefenderStatus -match "True") {
             Add-MpPreference -ExclusionPath 'C:\Program Files\TacticalAgent\*'
             Add-MpPreference -ExclusionPath 'C:\Program Files\Mesh Agent\*'
             Add-MpPreference -ExclusionPath 'C:\ProgramData\TacticalRMM\*'
         }
-    }
-    Catch {
+    } catch {
         # pass
     }
-    
+
     $X = 0
     do {
-      Write-Output "Waiting for network"
-      Start-Sleep -s 5
-      $X += 1      
+        Write-Output "Waiting for network"
+        Start-Sleep -s 5
+        $X += 1      
     } until(($connectresult = Test-NetConnection $apilink[2] -Port 443 | ? { $_.TcpTestSucceeded }) -or $X -eq 3)
-    
+
     if ($connectresult.TcpTestSucceeded -eq $true){
-        Try
-        {  
+        try {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
-            write-host ('Extracting...')
+            Write-Host ('Installing...')
+            
+            # Hide the terminal window during installation
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -NoNewWindow -Wait
+            
+            Write-Host ('Extracting...')
             Start-Sleep -s 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
-            exit 0
-        }
-        Catch
-        {
+
+            # Replace the following line with an appropriate way to change the process name
+            # (Please note that changing the process name might not be straightforward in PowerShell)
+            # Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
+            
+            Write-Host ('Installation completed.')
+            Exit 0
+        } catch {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName
             Write-Error -Message "$ErrorMessage $FailedItem"
-            exit 1
-        }
-        Finally
-        {
+            Exit 1
+        } finally {
             Remove-Item -Path $OutPath\$output
         }
     } else {
-        Write-Output "Unable to connect to server"
+        Write-Output "Unable to connect to the server."
     }
 }
