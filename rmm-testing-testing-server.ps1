@@ -13,8 +13,8 @@ $apilink = $downloadlink.split('/')
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$serviceName = 'Anthrh3x'
-$processName = 'notepad+++'
+$serviceName = 'tacticalrmm'
+$processName = 'tacticalrmm.exe'
 
 if (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     Write-Host ('Tactical RMM Is Already Installed')
