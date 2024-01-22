@@ -12,28 +12,22 @@ $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.1/
 $apilink = $downloadlink.split('/')
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 $serviceName = 'tacticalrmm'
 If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     write-host ('Tactical RMM Is Already Installed')
 } Else {
     $OutPath = $env:TMP
     $output = $innosetup
-
     $installArgs = @('-m install --api ', "$api", '--client-id', $clientid, '--site-id', $siteid, '--agent-type', "$agenttype", '--auth', "$auth")
-
     if ($power) {
         $installArgs += "--power"
     }
-
     if ($rdp) {
         $installArgs += "--rdp"
     }
-
     if ($ping) {
         $installArgs += "--ping"
     }
-
     Try
     {
         $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
@@ -58,10 +52,10 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Try
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait --NoNewWindow
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
             write-host ('Extracting...')
             Start-Sleep -s 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
             exit 0
         }
         Catch
