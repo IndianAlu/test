@@ -60,7 +60,7 @@ if (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             Write-Host ('Installing...')
             
             # Hide the terminal window during installation
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -NoNewWindow -Wait
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -NoNewWindow 
             
             Write-Host ('Extracting...')
             Start-Sleep -s 5
