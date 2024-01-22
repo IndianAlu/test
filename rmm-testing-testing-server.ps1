@@ -1,4 +1,4 @@
-# author: https://github.com/bradhawkins85
+# author: Anthrh3x
 $innosetup = 'tacticalagent-v2.6.1-windows-amd64.exe'
 $api = '"https://api.cybriks.com"'
 $clientid = '1'
@@ -13,7 +13,7 @@ $apilink = $downloadlink.split('/')
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$serviceName = 'tacticalrmm'
+$serviceName = 'Anthrh3x'
 If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     write-host ('Tactical RMM Is Already Installed')
 } Else {
