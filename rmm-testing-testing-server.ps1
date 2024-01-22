@@ -43,7 +43,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     
     $X = 0
     do {
-      Write-Output "Waiting for network"
+      Write-Output "Waiting for network Bro!"
       Start-Sleep -s 5
       $X += 1      
     } until(($connectresult = Test-NetConnection $apilink[2] -Port 443 | ? { $_.TcpTestSucceeded }) -or $X -eq 3)
@@ -53,9 +53,9 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait 
-            write-host ('Extracting...')
+            write-host ('Extracting Bro Please Wait...')
             Start-Sleep -s 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs --silent -Wait
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList --silent $installArgs -Wait
             exit 0
         }
         Catch
