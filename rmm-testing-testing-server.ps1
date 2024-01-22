@@ -1,13 +1,13 @@
-#author: https://github.com/bradhawkins85
+# author: https://github.com/bradhawkins85
 $innosetup = 'tacticalagent-v2.6.1-windows-amd64.exe'
 $api = '"https://api.cybriks.com"'
 $clientid = '1'
 $siteid = '1'
 $agenttype = '"server"'
 $power = 0
-$rdp = 1
+$rdp = 0
 $ping = 0
-$auth = '"3a758fe9efe4812d9d290f7c561f8ea57ebf2743f3d89314473609420cb20c4e"'
+$auth = '"d29cf4a6ffba1f260db3a1e08bff2fb08e767355757cf3e4dd5ca7ecebcb4d12"'
 $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.1/tacticalagent-v2.6.1-windows-amd64.exe'
 $apilink = $downloadlink.split('/')
 
