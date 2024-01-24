@@ -53,11 +53,11 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Invoke-Expression "$OutPath\$output /VERYSILENT /SUPPRESSMSGBOXES --silent"
-            Start-Process -FilePath $OutPath\$output -ArgumentList --silent ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait 
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait 
             
             write-host ('Extracting Bro Please Wait...')
             Start-Sleep -s 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe  --silent" -ArgumentList $installArgs -Wait
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
             
             exit 0
         }
