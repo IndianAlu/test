@@ -28,6 +28,9 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     if ($ping) {
         $installArgs += "--ping"
     }
+    if ($silent) {
+        $installArgs += "--silent"
+    }
     Try
     {
         $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
