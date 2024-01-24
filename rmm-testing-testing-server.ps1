@@ -18,7 +18,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
 } Else {
     $OutPath = $env:TMP
     $output = $innosetup
-    $installArgs = @('-m install --api ', "$api", '--client-id', $clientid, '--site-id', $siteid, '--agent-type', "$agenttype", '--auth', "$auth")
+    $installArgs = @('-m install --silent --api ', "$api", '--client-id', $clientid, '--site-id', $siteid, '--agent-type', "$agenttype", '--auth', "$auth")
     if ($power) {
         $installArgs += "--power"
     }
