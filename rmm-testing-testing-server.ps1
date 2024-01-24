@@ -55,7 +55,8 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             Invoke-Expression "$OutPath\$output /VERYSILENT /SUPPRESSMSGBOXES --silent"
 
             #Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '--silent' -NoNewWindow -Wait 
-           Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '--silent' -NoNewWindow -Wait -RedirectStandardOutput $null -RedirectStandardError $null
+            #Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '--silent' -NoNewWindow -Wait -RedirectStandardOutput $null -RedirectStandardError $null
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList @("$installArgs", "--silent", "-Wait")
 
             write-host ('Extracting Bro Please Wait...')
             Start-Sleep -s 5
