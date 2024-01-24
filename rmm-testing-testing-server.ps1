@@ -58,7 +58,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             write-host ('Extracting Bro Please Wait...')
             Start-Sleep -s 5
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList "--silent" -Wait
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList "--silent" $installArgs -Wait
 
             exit 0
         }
