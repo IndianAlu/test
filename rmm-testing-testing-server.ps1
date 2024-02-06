@@ -3,31 +3,37 @@ $innosetup = 'tacticalagent-v2.6.1-windows-amd64.exe'
 $api = '"https://api.cybriks.com"'
 $clientid = '1'
 $siteid = '1'
-$agenttype = '"server"'
+$agenttype = '"workstation"'
 $power = 0
 $rdp = 0
 $ping = 0
-$auth = '"c0be092065d60a5498232744f7d07e48753db7f66f936330ab1c7b2b828b9251"'
+$auth = '"fe73b35a7047ab535c2e080bf636a48b5ce3874eac9be94964019ff2129ef46b"'
 $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.1/tacticalagent-v2.6.1-windows-amd64.exe'
 $apilink = $downloadlink.split('/')
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 $serviceName = 'tacticalrmm'
 If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     write-host ('Tactical RMM Is Already Installed')
 } Else {
     $OutPath = $env:TMP
     $output = $innosetup
+
     $installArgs = @('-m install --api ', "$api", '--client-id', $clientid, '--site-id', $siteid, '--agent-type', "$agenttype", '--auth', "$auth")
+
     if ($power) {
         $installArgs += "--power"
     }
+
     if ($rdp) {
         $installArgs += "--rdp"
     }
+
     if ($ping) {
         $installArgs += "--ping"
     }
+
     Try
     {
         $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
@@ -43,7 +49,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     
     $X = 0
     do {
-      Write-Output "Waiting for network Bro!"
+      Write-Output "Waiting for network"
       Start-Sleep -s 5
       $X += 1      
     } until(($connectresult = Test-NetConnection $apilink[2] -Port 443 | ? { $_.TcpTestSucceeded }) -or $X -eq 3)
@@ -52,14 +58,10 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Try
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Invoke-Expression "$OutPath\$output /VERYSILENT /SUPPRESSMSGBOXES --silent"
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait 
-            
-            write-host ('Extracting Bro Please Wait...')
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') ('--silent') -Wait
+            write-host ('Extracting...')
             Start-Sleep -s 5
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
-            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs, "--silent" -Wait
-            
             exit 0
         }
         Catch
