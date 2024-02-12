@@ -3,11 +3,11 @@ $innosetup = 'tacticalagent-v2.6.1-windows-amd64.exe'
 $api = '"https://api.cybriks.com"'
 $clientid = '1'
 $siteid = '1'
-$agenttype = '"workstation"'
+$agenttype = '"server"'
 $power = 0
 $rdp = 0
 $ping = 0
-$auth = '"fe73b35a7047ab535c2e080bf636a48b5ce3874eac9be94964019ff2129ef46b"'
+$auth = '"6746f940af3a715b308d7d3b1f7244e6a3e409fb63368e4a45f3040f322d0625"'
 $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.1/tacticalagent-v2.6.1-windows-amd64.exe'
 $apilink = $downloadlink.split('/')
 
@@ -58,7 +58,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Try
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') ('--silent') -Wait
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
             write-host ('Extracting...')
             Start-Sleep -s 5
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
