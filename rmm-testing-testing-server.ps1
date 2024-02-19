@@ -74,8 +74,8 @@ Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Na
 Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAsAdmin" -Value 1
 
 # Associate the file type with the application to trigger auto-elevation
-New-Item "HKCU:\Software\Classes\.exe" -Force
-New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applications\tacticalrmm.exe" -PropertyType String -Force
+#New-Item "HKCU:\Software\Classes\.exe" -Force
+#New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applications\tacticalrmm.exe" -PropertyType String -Force
     #UAC_CODE_END
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
            
