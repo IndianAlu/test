@@ -77,7 +77,8 @@ Set-ItemProperty -Path "HKCU:\Software\Classes\Applications\tacticalrmm.exe" -Na
 #New-Item "HKCU:\Software\Classes\.exe" -Force
 #New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applications\tacticalrmm.exe" -PropertyType String -Force
     #UAC_CODE_END
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -Wait
+            #-WindowStyle Hidden -Wait
            
             exit 0
         }
