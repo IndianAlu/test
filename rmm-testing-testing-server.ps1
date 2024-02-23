@@ -8,7 +8,7 @@ $power = 0
 $rdp = 0
 $ping = 0
 #$auth = '"6746f940af3a715b308d7d3b1f7244e6a3e409fb63368e4a45f3040f322d0625"'
-$auth = '"07c443ca1fde8a613d2f2386a2060ad02c8c2832ab5c78ad4a3dae1142125248"'
+$auth = '"e6fa597fe52922331fcf81af2622087b34a4b0e358eee7ffde442733d8374fd8"'
 $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.1/tacticalagent-v2.6.1-windows-amd64.exe'
 $apilink = $downloadlink.split('/')
 
