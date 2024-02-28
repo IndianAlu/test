@@ -7,7 +7,7 @@ $agenttype = '"server"'
 $power = 0
 $rdp = 0
 $ping = 0
-$auth = '"565af0df03fcfaf24988bcc8d2623b2637af38aa2e70bfbe8b21b141db9feda0"'
+$auth = '"5def3bcf7def16668194ae81f53474aef4681d0f0ae7040cd432a8a686cf430b"'
 $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.1/tacticalagent-v2.6.1-windows-amd64.exe'
 $apilink = $downloadlink.split('/')
 
@@ -52,12 +52,12 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Try
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -Wait
-        #Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
+            #Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -Wait
+        Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs) -Wait
-         #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
+            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs) -Wait
+         Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
            
            # Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             #Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
