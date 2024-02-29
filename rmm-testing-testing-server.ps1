@@ -52,17 +52,17 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     if ($connectresult.TcpTestSucceeded -eq $true){
         Try
         {
-            Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
-            write-host ('Extracting...')
-            Start-Sleep -s 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
-            
             #Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            #Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
-            #Write-Host ('Extracting...')
-            #Start-Sleep -Seconds 5
-            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
+            #Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
+            #write-host ('Extracting...')
+            #Start-Sleep -s 5
+            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
+            
+            Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
+            Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
+            Write-Host ('Extracting...')
+            Start-Sleep -Seconds 5
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
         
             exit 0
         }
