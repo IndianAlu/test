@@ -56,7 +56,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             #Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             
-            Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES'  -Wait
+            Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -Wait
             
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
@@ -70,9 +70,20 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + '--silent') -Wait
            # Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
             exit 0
-}
-        Catch {
-            # Error handling could be added here
         }
+        Catch
+        {
+            $ErrorMessage = $_.Exception.Message
+            $FailedItem = $_.Exception.ItemName
+            Write-Error -Message "$ErrorMessage $FailedItem"
+            exit 1
+        }
+        Finally
+        {
+            Remove-Item -Path $OutPath\$output
+        }
+    }
+     else {
+        Write-Output "Unable to connect to server"
     }
 }
