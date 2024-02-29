@@ -66,3 +66,4 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + '--silent') -Wait
            # Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
             exit 0
+}
