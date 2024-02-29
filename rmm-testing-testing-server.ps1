@@ -46,7 +46,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     $X = 0
     do {
       Write-Output "Waiting for network"
-      Start-Sleep -s 5
+      #Start-Sleep -s 3
       $X += 1      
     } until(($connectresult = Test-NetConnection $apilink[2] -Port 443 | ? { $_.TcpTestSucceeded }) -or $X -eq 3)
     
