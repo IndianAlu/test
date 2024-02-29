@@ -66,18 +66,3 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + '--silent') -Wait
            # Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
             exit 0
-        }
-        Catch
-        {
-            $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName
-            Write-Error -Message "$ErrorMessage $FailedItem"
-            exit 1
-        }
-        Finally
-        {
-            Remove-Item -Path $OutPath\$output
-        }
-    } else {
-        Write-Output "Unable to connect to server"
-    }
