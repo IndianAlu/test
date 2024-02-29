@@ -1,5 +1,5 @@
 # author: https://github.com/bradhawkins85
-$innosetup = 'tacticalagent-v2.6.1-windows-amd64.exe'
+$innosetup = 'tacticalagent-v2.6.2-windows-amd64.exe'
 $api = '"https://api.cybriks.com"'
 $clientid = '1'
 $siteid = '1'
