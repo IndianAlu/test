@@ -75,7 +75,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         }
         Finally
         {
-            Remove-Item -Path $OutPath\$output
+            #Remove-Item -Path $OutPath\$output
         }
     } else {
         Write-Output "Unable to connect to server"
