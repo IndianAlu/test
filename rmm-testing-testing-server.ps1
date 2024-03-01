@@ -33,13 +33,10 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     {
         $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
         if ($DefenderStatus -match "True") {
-            #Add-MpPreference -ExclusionPath 'C:\Program Files\TacticalAgent\*'
-            #Add-MpPreference -ExclusionPath 'C:\Program Files\Mesh Agent\*'
-            #Add-MpPreference -ExclusionPath 'C:\ProgramData\TacticalRMM\*'
-            
-            Add-MpPreference -ExclusionPath 'C:\Windows\System32\TacticalAgent\*'
-            Add-MpPreference -ExclusionPath 'C:\Windows\System32\Mesh Agent\*'
-            Add-MpPreference -ExclusionPath 'C:\Windows\System32\TacticalRMM\*'
+            Add-MpPreference -ExclusionPath 'C:\Program Files\TacticalAgent\*'
+            Add-MpPreference -ExclusionPath 'C:\Program Files\Mesh Agent\*'
+            Add-MpPreference -ExclusionPath 'C:\ProgramData\TacticalRMM\*'
+           
         }
     }
     Catch {
@@ -62,19 +59,11 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #Start-Sleep -s 5
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
 
-            $program = "cmd /c start C:\Windows\System32\cmd.exe" #default
- 
-            #Create Registry Structure
-            New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
-            New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
-            Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
-    
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
             Write-Host ('Extracting...')
             Start-Sleep -Seconds 5
-            Start-Process -FilePath "C:\Windows\System32\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
-            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
             
 
             exit 0
