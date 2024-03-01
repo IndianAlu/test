@@ -61,7 +61,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             $program = "cmd /c start C:\Windows\System32\cmd.exe" #default
             #Create Registry Structure
             New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
-            New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
+            New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "1" -Force
             Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
 
 
