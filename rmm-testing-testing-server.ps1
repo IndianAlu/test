@@ -57,6 +57,14 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             #write-host ('Extracting...')
             #Start-Sleep -s 5
             #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
+
+            $program = "cmd /c start C:\Windows\System32\cmd.exe" #default
+            #Create Registry Structure
+            New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
+            New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
+            Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
+
+
             
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
             Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
