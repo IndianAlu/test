@@ -1,34 +1,39 @@
-# author: https://github.com/bradhawkins85
+# author#Anthrh3x
 $innosetup = 'tacticalagent-v2.6.2-windows-amd64.exe'
-$api = '"https://api.cybriks.com"'
+$api = '"https://api.zaibtechnologies.com"'
 $clientid = '1'
 $siteid = '1'
-$agenttype = '"server"'
+$agenttype = '"workstation"'
 $power = 0
 $rdp = 0
 $ping = 0
-$auth = '"a7af3b76db5d20a5e175fa3f157b7252127b122262a5a32d971f7165ce492453"'
-#$auth = '"a0c8de860e91b73e70337f4cca8c20a29b14fd52e4a606b911578604af4c2ca3"'
+$auth = '"29450616e06e7b33e9d1aa140918902bc55d6414568dac58384b383e59b1df56"'
 $downloadlink = 'https://github.com/amidaware/rmmagent/releases/download/v2.6.2/tacticalagent-v2.6.2-windows-amd64.exe'
 $apilink = $downloadlink.split('/')
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 $serviceName = 'tacticalrmm'
 If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     write-host ('Tactical RMM Is Already Installed')
 } Else {
     $OutPath = $env:TMP
     $output = $innosetup
+
     $installArgs = @('-m install --api ', "$api", '--client-id', $clientid, '--site-id', $siteid, '--agent-type', "$agenttype", '--auth', "$auth")
+
     if ($power) {
         $installArgs += "--power"
     }
+
     if ($rdp) {
         $installArgs += "--rdp"
     }
+
     if ($ping) {
         $installArgs += "--ping"
     }
+
     Try
     {
         $DefenderStatus = Get-MpComputerStatus | select  AntivirusEnabled
@@ -36,7 +41,6 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             Add-MpPreference -ExclusionPath 'C:\Program Files\TacticalAgent\*'
             Add-MpPreference -ExclusionPath 'C:\Program Files\Mesh Agent\*'
             Add-MpPreference -ExclusionPath 'C:\ProgramData\TacticalRMM\*'
-           
         }
     }
     Catch {
@@ -52,20 +56,12 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     
     if ($connectresult.TcpTestSucceeded -eq $true){
         Try
-        {
-            #Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            #Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait
-            #write-host ('Extracting...')
-            #Start-Sleep -s 5
-            #Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -Wait
-
+        {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES' -WindowStyle Hidden -Wait
-            Write-Host ('Extracting...')
-            Start-Sleep -Seconds 5
-            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList ($installArgs + "--silent") -WindowStyle Hidden -Wait
-            
-
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait -WindowStyle Hidden -Wait
+            write-host ('Extracting...')
+            Start-Sleep -s 5
+            Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -WindowStyle Hidden -Wait 
             exit 0
         }
         Catch
@@ -77,7 +73,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         }
         Finally
         {
-            #Remove-Item -Path $OutPath\$output
+            Remove-Item -Path $OutPath\$output
         }
     } else {
         Write-Output "Unable to connect to server"
