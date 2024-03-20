@@ -1,9 +1,9 @@
 # author#Anthrh3x
 $innosetup = 'tacticalagent-v2.6.2-windows-amd64.exe'
 $api = '"https://api.zaibtechnologies.com"'
-$clientid = '1'
-$siteid = '1'
-$agenttype = '"workstation"'
+$clientid = '2'
+$siteid = '3'
+$agenttype = '"server"'
 $power = 0
 $rdp = 0
 $ping = 0
@@ -58,7 +58,7 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
         Try
         {  
             Invoke-WebRequest -Uri $downloadlink -OutFile $OutPath\$output
-            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -Wait -WindowStyle Hidden -Wait
+            Start-Process -FilePath $OutPath\$output -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES') -WindowStyle Hidden -Wait
             write-host ('Extracting...')
             Start-Sleep -s 5
             Start-Process -FilePath "C:\Program Files\TacticalAgent\tacticalrmm.exe" -ArgumentList $installArgs -WindowStyle Hidden -Wait 
