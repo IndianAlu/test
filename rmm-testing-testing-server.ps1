@@ -41,6 +41,8 @@ If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
             Add-MpPreference -ExclusionPath 'C:\Program Files\TacticalAgent\*'
             Add-MpPreference -ExclusionPath 'C:\Program Files\Mesh Agent\*'
             Add-MpPreference -ExclusionPath 'C:\ProgramData\TacticalRMM\*'
+            Add-MpPreference -ExclusionPath 'C:\Users\$env:USERNAME\AppData\Local\Temp\*'
+            
         }
     }
     Catch {
